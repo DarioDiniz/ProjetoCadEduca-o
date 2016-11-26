@@ -5,7 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+
 
 @Entity 
 public class Aluno {
@@ -20,16 +20,18 @@ public class Aluno {
     private int matricula;
     
    
-    @OneToOne
-    private Curso curso;
+   @Column(nullable=false)
+    private String nomeCurso;
 
-    public Curso getCurso() {
-        return curso;
+    public String getNomeCurso() {
+        return nomeCurso;
     }
 
-    public void setCurso(Curso curso) {
-        this.curso = curso;
+    public void setNomeCurso(String nomeCurso) {
+        this.nomeCurso = nomeCurso;
     }
+
+    
     
     
     

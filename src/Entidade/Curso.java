@@ -41,4 +41,6 @@ public class Curso {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+    
+   
 }

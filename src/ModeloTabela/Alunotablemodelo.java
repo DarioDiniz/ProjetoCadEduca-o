@@ -36,7 +36,7 @@ public class Alunotablemodelo extends AbstractTableModel {
             case 1:
                 return aluno.getNome();
             case 2:
-                return aluno.getCurso();
+                return aluno.getNomeCurso();
             case 3:
                 return aluno.getMatricula();
             case 4:

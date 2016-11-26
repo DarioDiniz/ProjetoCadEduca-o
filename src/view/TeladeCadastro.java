@@ -2,7 +2,9 @@
 package view;
 
 import DAO.AlunoDao;
+import DAO.CursoDao;
 import Entidade.Aluno;
+import Entidade.Curso;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,15 +15,26 @@ public class TeladeCadastro extends javax.swing.JFrame {
 
     Aluno aluno;
 
+    private void preencheCurso(){
+    CursoDao cd = new CursoDao();
+    cbCurso.removeAll();
+    for(Curso curso : cd.lista()){
+        cbCurso.addItem(curso.getDescricao());
+    }
+    }
     public TeladeCadastro() {
         initComponents();
         this.aluno = new Aluno();
+        preencheCurso();
     }
 
     TeladeCadastro(Aluno a) {
         initComponents();
         this.aluno = a;
-
+        preencheCurso();
+        
+     
+        
         ctnome.setText(a.getNome());
 
         ctmatricula.setText(String.valueOf(a.getMatricula()));
@@ -43,7 +56,6 @@ public class TeladeCadastro extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         ctmatricula = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        ctcurso = new javax.swing.JTextField();
         btsalvar = new javax.swing.JButton();
         btlimpar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -52,6 +64,8 @@ public class TeladeCadastro extends javax.swing.JFrame {
         ctEmail = new javax.swing.JTextField();
         ctCpf = new javax.swing.JFormattedTextField();
         ctCelular = new javax.swing.JFormattedTextField();
+        cbCurso = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -112,39 +126,54 @@ public class TeladeCadastro extends javax.swing.JFrame {
             ex.printStackTrace();
         }
 
+        cbCurso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCursoActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Cadastro do aluno");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btsalvar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btlimpar))
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btsalvar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btlimpar))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1)
+                                    .addComponent(ctnome, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                                    .addComponent(ctmatricula)
+                                    .addComponent(cbCurso, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(79, 79, 79)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6)
+                                    .addComponent(ctEmail)
+                                    .addComponent(ctCpf)
+                                    .addComponent(ctCelular, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(ctnome, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                            .addComponent(ctmatricula)
-                            .addComponent(ctcurso))
-                        .addGap(79, 79, 79)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(ctEmail)
-                            .addComponent(ctCpf)
-                            .addComponent(ctCelular, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE))))
+                        .addGap(156, 156, 156)
+                        .addComponent(jLabel7)))
                 .addContainerGap(95, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(4, 4, 4)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel4))
@@ -166,8 +195,8 @@ public class TeladeCadastro extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ctcurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ctEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ctEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btsalvar)
@@ -189,6 +218,7 @@ public class TeladeCadastro extends javax.swing.JFrame {
 
     private void btsalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btsalvarActionPerformed
         aluno.setNome(ctnome.getText());
+      aluno.setNomeCurso(cbCurso.getSelectedItem().toString());
         aluno.setMatricula(Integer.parseInt(ctmatricula.getText()));
         aluno.setEmail(ctEmail.getText());
         aluno.setCelular(ctCelular.getText());
@@ -205,10 +235,11 @@ public class TeladeCadastro extends javax.swing.JFrame {
        
 
         JOptionPane.showMessageDialog(rootPane, "Salvo com Sucesso");
+        dispose();
     }//GEN-LAST:event_btsalvarActionPerformed
 
     private void btlimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimparActionPerformed
-        ctcurso.setText("");
+
         ctmatricula.setText("");
         ctnome.setText("");
         ctCpf.setText("");
@@ -219,6 +250,10 @@ public class TeladeCadastro extends javax.swing.JFrame {
     private void ctEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ctEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ctEmailActionPerformed
+
+    private void cbCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCursoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbCursoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -259,10 +294,10 @@ public class TeladeCadastro extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btlimpar;
     private javax.swing.JButton btsalvar;
+    private javax.swing.JComboBox<String> cbCurso;
     private javax.swing.JFormattedTextField ctCelular;
     private javax.swing.JFormattedTextField ctCpf;
     private javax.swing.JTextField ctEmail;
-    private javax.swing.JTextField ctcurso;
     private javax.swing.JTextField ctmatricula;
     private javax.swing.JTextField ctnome;
     private javax.swing.JLabel jLabel1;
@@ -271,5 +306,6 @@ public class TeladeCadastro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     // End of variables declaration//GEN-END:variables
 }

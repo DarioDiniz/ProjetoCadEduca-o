@@ -1,15 +1,15 @@
-
 package DAO;
 
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
-import util.HibernateUtil;
 
 
-public class DAOGenerico<T> implements Dao<T>{
+public class DAOGenerico<T> implements Dao<T> {
 
     private Session sessao;
     private Transaction transacao;
@@ -18,20 +18,23 @@ public class DAOGenerico<T> implements Dao<T>{
     public DAOGenerico(Class classe) {
         this.classe = classe;
     }
-    
-    
-    
+
+    SessionFactory getSession() {
+        return new Configuration().configure().buildSessionFactory();
+    }
+
     @Override
     public boolean salvar(T t) {
+        Session sessao = null;
         try {
-            sessao = HibernateUtil.getSessionFactory().openSession();
-            transacao = sessao.beginTransaction();
+            sessao = getSession().openSession();
+            sessao.beginTransaction();
             sessao.save(t);
-            
-            transacao.commit();
+
+            sessao.getTransaction().commit();
         } catch (Exception e) {
             return false;
-        }finally{
+        } finally {
             sessao.close();
         }
         return true;
@@ -39,74 +42,67 @@ public class DAOGenerico<T> implements Dao<T>{
 
     @Override
     public boolean excluir(T t) {
-    try {
-            sessao = HibernateUtil.getSessionFactory().openSession();
-            transacao = sessao.beginTransaction();
+        Session sessao = null;
+        try {
+            sessao = getSession().openSession();
+            sessao.beginTransaction();
             sessao.delete(t);
-            
-            transacao.commit();
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null,"falha ao remover");
-        return false;
-    } finally {
-        sessao.close();
-    }
-    return true;
+            sessao.getTransaction().commit();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao excluir!", "Erro!", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } finally {
+            sessao.close();
+        }
+        return true;
     }
 
     @Override
     public boolean editar(T t) {
-    try {
-        sessao = HibernateUtil.getSessionFactory().openSession();
-        transacao = sessao.beginTransaction();
-        sessao.update(t);
-        
-        transacao.commit();
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null,"falha ao editar");
-        return false;
-    } finally {
-        sessao.close();
+        Session sessao = null;
+
+		try {
+			sessao = getSession().openSession();
+			sessao.beginTransaction();
+
+			sessao.update(t);
+			sessao.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return false;
+		} finally {
+			sessao.close();
+		}
+		return true;
     }
-    return true;
-    }
-    
 
     @Override
     public List<T> lista() {
-    List<T> lista = null;
-        try{
-            sessao = HibernateUtil.getSessionFactory().openSession();
-            lista = sessao.createCriteria(Object.class).list();
-            
-        } catch (Exception e){
-            JOptionPane.showConfirmDialog(null,"Falha ao lista");
-            return null;
-        }finally{
-            sessao.close();
-        }
-        return lista;
+       List<T> lista = null;
+		Session sessao = null;
+		try {
+			sessao = getSession().openSession();
+			lista = sessao.createCriteria(classe).list();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return null;
+		}
+		return lista;
     }
-    
-    public List<T> listar(String campo,Object value){
-        List<T> lista = null;
-        try {
-            sessao = HibernateUtil.getSessionFactory().openSession();
-            lista = sessao.createCriteria(classe).add(Restrictions.eq(campo,value)).list();
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Falha ao pesquisar");
-            return null;
-        }finally {
-            sessao.close();
-        }
-        return lista;
-            
-        }
-    }
-    
-    
-    
- 
-    
 
+    public List<T> listar(String campo, Object value) {
+     List<T> lista = null;
+		Session sessao = null;
+		try {
+			sessao = getSession().openSession();
+			lista = sessao.createCriteria(classe).add(Restrictions.eq(campo, value)).list();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return null;
+		} finally {
+			sessao.close();
+		}
+		return lista;
+
+    }
+}
