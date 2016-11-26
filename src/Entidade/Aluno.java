@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity 
 public class Aluno {
@@ -18,9 +19,20 @@ public class Aluno {
     @Column(nullable=false,unique=true)
     private int matricula;
     
-    @Column(nullable=false)
-    private String curso;
+   
+    @OneToOne
+    private Curso curso;
 
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+    
+    
+    
     @Column (nullable = false,unique=true)
     private String cpf;
     
@@ -43,9 +55,6 @@ public class Aluno {
         return matricula;
     }
 
-    public String getCurso() {
-        return curso;
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -59,9 +68,6 @@ public class Aluno {
         this.matricula = matricula;
     }
 
-    public void setCurso(String curso) {
-        this.curso = curso;
-    }
 
     public String getCpf() {
         return cpf;
